@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+	<link rel="stylesheet" href="css/common.css" type="text/css" />
+	<title>首页</title>
+	<style>
+		.user-wrap{
+			background: url(images/usertop.png) repeat ;
+			background-size: 100% 1.3rem;
+			width:100%;
+			height: 1.3rem;
+		}
+		.user{
+			text-align: center;
+			color: #8A9099;
+			font-size: 0.18rem;
+			margin-top: 0.3rem;
+		}
+		.user-img{
+			width:0.55rem;
+			height: 0.55rem;
+			display: inline-block;
+			margin-right: 0.1rem;
+		}
+		.user-img img{
+			width:0.55rem;
+			height: 0.55rem;
+			border-radius: 50%;
+			vertical-align: middle;
+		}
+		.module{
+			height: 1.03rem;
+			padding: 0.15rem;
+			background: #ffffff;
+			margin-top: 0.1rem;
+		}
+		.module h3{
+			font-size: 0.15rem;
+			border-bottom:0.01rem solid #EBEBF2;
+			height: 0.36rem;
+		    line-height: 0.36rem;
+		    font-weight: 500;
+		    margin-bottom: 0.07rem;
+		    color:#99A2CC;
+		}
+		.module p{
+			text-align: center;
+		}
+		.finance{
+			padding: 0.15rem;
+			background: #ffffff;
+		}
+		.finance h3{
+			font-size: 0.15rem;
+			border-bottom:0.01rem solid #EBEBF2;
+			height: 0.36rem;
+		    line-height: 0.36rem;
+		    font-weight: 500;
+		    color:#99A2CC;
+		}
+		.finance .money{
+			font-size: 0.15rem;
+			margin-top: 0.08rem;
+		}
+		.finance .flex-wrap{
+			text-align: center;
+		}
+		.finance .money-wrap{
+			background: #feeceb;
+			margin-top: 0.1rem;
+			height: 0.4rem;
+		}
+		.finance .right-border{
+			border-right: 0.01rem solid #ffffff;
+			line-height: 0.2rem;
+		}
+
+		.flex-wrap{
+			display:flex;
+			justify-content: space-around;
+		}
+		.flex-wrap > div{
+			width: 100%;
+			padding: 0 0.04rem;
+		}
+		.flex-wrap > div:last-child{
+			border-right: none;
+		}
+		footer {
+			background:#fff;
+			display:flex;
+			height:0.5rem;
+			justify-content: space-around;
+			border-top:0.01rem solid #cdcdcd;
+		}
+		footer a{
+			display:flex;
+			flex-direction:column;
+			justify-content:center;
+			text-align:center;
+			width: 100%;
+		}
+		footer img{
+			width: 0.2rem;
+			height: 0.2rem;
+    		margin: 0 auto;
+		}
+		footer a p{
+			margin-top:0.04rem;
+		}
+		footer a p.active {
+			color:#F5473B;
+		}
+	</style>
+</head>
+<body>
+	<div class="user-wrap">
+        <div class="user">
+        	<div class="user-img"><img src="images/touxiang.png" alt=""></div>
+        	欢迎登录，<span class="redcolor" id=""></span>
+        </div>       
+    </div>
+    <div class="content-wrap">
+	    <div class="finance">
+	        <h3>财务信息</h3>
+			<div class="flex-wrap">
+	        	<div class="right-border">
+	        		<p class="redcolor money" id="receivableMoney"></p>
+	        		<p>应收账款</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor money" id="receivedMoney"></p>
+	        		<p>已收账款</p>
+	        	</div>
+	        </div>
+	        <div class="flex-wrap money-wrap">
+	        	<div class="right-border">
+	        		<p class="redcolor" id="payMoney"></p>
+	        		<p>应付账款</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor" id="paidMoney"></p>
+	        		<p>已付账款</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor"  id="profit"></p>
+	        		<p>净利润</p>
+	        	</div>
+	        </div>
+	    </div>
+	    <div class="module">
+	        <h3>订单信息</h3>
+	        <div class="flex-wrap">
+	        	<div class="right-border">
+	        		<p class="redcolor" id="prepareCount"></p>
+	        		<p>待配货</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor" id="deliveryCount"></p>
+	        		<p>待发货</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor" id="receiveCount"></p>
+	        		<p>待收货</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor" id="outNum"></p>
+	        		<p>缺货</p>
+	        	</div>
+	        	<div class="right-border">
+	        		<p class="redcolor" id="waitMoney"></p>
+	        		<p>待结款</p>
+	        	</div>
+	        </div>
+	    </div>
+	    <div class="module">
+	        <h3>联营商</h3>
+	        <div class="flex-wrap">
+	        	<div>
+	        		<p class="redcolor" id="firmCount"></p>
+	        		<p>厂商</p>
+	        	</div>
+	        	<div>
+	        		<p class="redcolor" id="licensorCount"></p>
+	        		<p>品牌授权商</p>
+	        	</div>
+	        	<div>
+	        		<p class="redcolor" id="serviceCount"></p>
+	        		<p>身边服务站</p>
+	        	</div>
+	        	<div>
+	        		<p class="redcolor" id="marketCount"></p>
+	        		<p>专业市场</p>
+	        	</div>
+	        	<div>
+	        		<p class="redcolor" id="maintenanceCount"></p>
+	        		<p>维保商</p>
+	        	</div>
+	        </div>
+	    </div>
+	</div>
+	<footer>
+		<a href="#">
+			<img src="images/shouye.png" alt="">
+			<p class="redcolor">首页</p>
+		</a>
+		<a href="saleStatistics.html">
+			<img src="images/shujutongji.png" alt="">
+			<p>数据统计</p>
+		</a>
+	</footer>
+</body>
+<script src="js/jquery1.11.min.js"></script>
+<script src="../js/config.js"></script>
+<script>
+    $(function(){
+		//财务信息
+		$.ajax({
+			type:"GET",
+			url:ApiUrl+"/wechat/WechatHomeCtrl-finance",
+			xhrFields:{
+				withCredentials:true,
+			},
+			crossDomain:true,
+			success:function(res){
+				$("#paidMoney").html('￥'+res.data.paidMoney);
+				$("#payMoney").html('￥'+res.data.payMoney);
+				$("#receivableMoney").html('￥'+res.data.receivableMoney);
+				$("#receivedMoney").html('￥'+res.data.receivedMoney);
+				$("#profit").html('￥'+(parseFloat(res.data.payMoney)-parseFloat(res.data.paidMoney)).toFixed(2));
+			},error:function(){
+
+			}
+		});
+		//订单信息
+		$.ajax({
+			type:"GET",
+			url:ApiUrl+"/wechat/WechatHomeCtrl-order",
+			xhrFields:{
+				withCredentials:true,
+			},
+			crossDomain:true,
+			success:function(res){
+				$("#prepareCount").html(res.data.prepareCount);
+				$("#deliveryCount").html(res.data.deliveryCount);
+				$("#receiveCount").html(res.data.receiveCount);
+				$("#outNum").html(res.data.outNum);
+				$("#waitMoney").html('￥'+(res.data.payMoney).toFixed(2));
+			},error:function(){
+
+			}
+		});
+		//联营商
+		$.ajax({
+			type:"GET",
+			url:ApiUrl+"/wechat/WechatHomeCtrl-supplier",
+			xhrFields:{
+				withCredentials:true,
+			},
+			crossDomain:true,
+			success:function(res){
+				$("#firmCount").html(res.data.firmCount);
+				$("#licensorCount").html(res.data.licensorCount);
+				$("#marketCount").html(res.data.marketCount);
+				$("#maintenanceCount").html(res.data.maintenanceCount);
+				$("#serviceCount").html(res.data.serviceCount);
+			},error:function(){
+
+			}
+		});
+    })
+</script>
+
+</html>

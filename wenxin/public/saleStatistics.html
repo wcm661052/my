@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <link rel="stylesheet" href="css/common.css" type="text/css" />
+    <link rel="stylesheet" href="css/mobiscroll_002.css" type="text/css">
+    <link rel="stylesheet" href="css/mobiscroll.css" type="text/css">
+    <link rel="stylesheet" href="css/mobiscroll_003.css" type="text/css">
+    <title>销售统计</title>
+    <style>
+        body{
+            background: #FFFFFF;
+        }
+        .sale-top{
+            height: 0.8rem;
+        }
+        .sale-top .year{
+            float: left;
+            text-align: center;
+            height: 0.8rem;
+            width: 1.3rem;
+        }
+        #nowyear{
+            width: 0.6rem;
+            font-size: 0.25rem;
+            margin-top: 0.2rem;
+            color: #1b2e4b;
+            font-weight: 600;
+        }
+        .sale-top .sale{
+            float: right;
+            text-align: right;
+            margin: 0.1rem 0.2rem 0 0;
+        }
+        .sale p{
+            line-height: 0.3rem;
+        }
+        .sale p span{
+            font-size: 0.14rem;
+            color: #1b2e4b;
+            margin-left: 0.1rem;
+        }
+        .swiper-wrapper{
+            display: flex;
+        }
+        .swiper-wrapper .swiper-slide{
+            -webkit-flex-shrink:0;
+            flex-shrink:0;
+            text-align: center;
+            padding:0.15rem 0;
+            font-size: 0.16rem;
+            color: #faa39d;
+        }
+        .swiper-wrapper li{
+            border-bottom: 0.01rem solid #f88c84
+        }
+        .swiper-wrapper .active{
+            border-bottom: 0.02rem solid #F5473B;
+            color: #F5473B;
+        }
+        .salemoney{
+            height: 0.5rem;
+            padding: 0 0.25rem;
+            border-bottom: 0.01rem solid #EBEEF2;
+            line-height: 0.5rem;
+        }
+        .salemoney p{
+            font-size: 0.14rem;
+            color: #1B2E4B;
+        }
+        .salemoney img{
+            height: 0.2rem;
+            width: 0.2rem;
+            margin-right: 0.2rem;
+            vertical-align: sub;
+        }
+        .salemoney p span{
+            float: right;
+            font-size: 0.18rem;
+        }
+        .parallax-bg{
+            width: 200%;
+            height: 2rem;
+            padding: 0 0.15rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="sale-top">
+        <div class="year">
+            <p><input id="nowyear" readonly="readonly" value=""/></p>
+            <p>点击切换年份</p>
+        </div>
+        <div class="sale">
+            <p>累计销售额<span id="salesMoney"></span></p>
+            <p>累计销售利润<span id="profit"></span></p>
+        </div>
+    </div>
+    <div class="swiper-container" style="overflow: hidden;">
+        <div class="parallax-bg" id="container" data-swiper-parallax="-50%"></div>
+        <ul class="swiper-wrapper">
+            <li class="active swiper-slide">1月</li>
+            <li class="swiper-slide">2月</li>
+            <li class="swiper-slide">3月</li>
+            <li class="swiper-slide">4月</li>
+            <li class="swiper-slide">5月</li>
+            <li class="swiper-slide">6月</li>
+            <li class="swiper-slide">7月</li>
+            <li class="swiper-slide">8月</li>
+            <li class="swiper-slide">9月</li>
+            <li class="swiper-slide">10月</li>
+            <li class="swiper-slide">11月</li>
+            <li class="swiper-slide">12月</li>
+        </ul>
+    </div>
+    <div class="salemoney">
+        <p><img src="images/yuesale.png" alt="">月销售额<span class="redcolor" id="monthsale"></span></p>
+    </div>
+    <div class="salemoney" id="todaysale">
+        <p><img src="images/todaysale.png" alt="">今日销售额<span class="redcolor" id="todayMoney"></span></p>
+    </div>
+    <div class="salemoney">
+        <p><img src="images/todayshou.png" alt="">今日收款<span class="redcolor" id="yszk"></span></p>
+    </div>
+    <div class="salemoney">
+        <p><img src="images/todayfu.png" alt="">今日付款<span class="redcolor" id="yfzk"></span></p>
+    </div>
+</body>
+<script src="js/jquery1.11.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="js/highcharts.js"></script>
+<script src="js/swiper-3.3.1.jquery.min.js"></script>
+<script src="js/mobiscroll_002.js" type="text/javascript"></script>
+<script src="js/mobiscroll_004.js" type="text/javascript"></script>
+<script src="js/mobiscroll.js" type="text/javascript"></script>
+<script src="js/mobiscroll_003.js" type="text/javascript"></script>
+<script src="js/mobiscroll_005.js" type="text/javascript"></script>
+<script>
+    var monthsale=[]
+    $(function(){
+        //月份滑动
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 6,
+            paginationClickable: true,
+            parallax : true,
+        });
+        //月份点击
+        $(".swiper-wrapper li").click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            console.log(monthsale)
+            $("#monthsale").html('￥'+monthsale[$(this).index()]);
+        });
+        var currYear = (new Date()).getFullYear();
+        $("#nowyear").val(currYear);
+        var currYear = (new Date()).getFullYear();
+        var start=currYear - 10;
+        var end= currYear + 20 ;
+        //日期选择
+        $("#nowyear").mobiscroll().date({
+            theme: 'android-ics light', //皮肤样式
+            display: 'modal', //显示方式
+            mode:'scroller',
+            dateFormat: 'yy', // 日期格式
+            setText: '确定', //确认按钮名称
+            cancelText: '取消',//取消按钮名籍我
+            dateOrder: 'yy', //面板中日期排列格式
+            yearText: '年', //面板中年月日文字
+            yearText: '年',  //面板中年月日文字
+            startYear:start, //开始年份
+            endYear:end,//结束年份
+            headerText: function (valueText) {  array = valueText.split('-');  return array[0]  + "年" ;  },  //自定义弹出框头部格式
+            onSelect:function(valueText,inst){
+                $("#nowyear").val(valueText)
+                year(valueText)
+            }
+        });
+        year()
+        //今日统计
+        $.ajax({
+            type:"GET",
+            url:ApiUrl+"/wechat/WechatSalesStatisticsCtrl-today",
+            xhrFields:{
+                withCredentials:true,
+            },
+            crossDomain:true,
+            success:function(res){
+                $("#todayMoney").html('￥'+res.data.salesMoney);
+                $("#yszk").html('￥'+res.data.yszk);
+                $("#yfzk").html('￥'+res.data.yfzk);
+            },error:function(){
+
+            }
+        });
+        //日销售额跳转
+        $("#todaysale").click(function () {
+            location.href='saleList.html'
+        })
+    })
+    //年度统计
+    function year(date) {
+        $.ajax({
+            type:"GET",
+            async: false,
+            url:ApiUrl+"/wechat/WechatSalesStatisticsCtrl-annul",
+            data:{
+                year:date
+            },
+            xhrFields:{
+                withCredentials:true,
+            },
+            crossDomain:true,
+            success:function(res){
+                $("#salesMoney").html('￥'+res.data.salesMoney);
+                $("#profit").html('￥'+res.data.profit);
+                monthsale=res.data.monthSalesList
+                var maplist=[]
+                $("#monthsale").html('￥'+monthsale[0]);
+                for(var i=0;i<monthsale.length;i++){
+                    maplist[i]=parseFloat((parseFloat(monthsale[i])/100).toFixed(2))
+                }
+                //图表
+                var chart = Highcharts.chart('container', {
+                    chart: {
+                        type: 'line'
+                        ,showAxes: false
+                    },
+                    plotOptions: {
+                        line: {
+                            dataLabels: {
+                                enabled: true,         // 开启数据标签
+                                format: '{y}万'
+                            },
+                            enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                        }
+                    },
+                    series: [{
+                        data: maplist,
+                        showInLegend: false,
+                        zones: [{
+                            color: '#F5473B'
+                        }]
+                    }],
+                    title: {
+                        text: null
+                    },
+                    xAxis: {
+                        labels: {enabled: false},
+                        title:{
+                            text: null
+                        }
+                    },
+                    yAxis:{
+                        labels:{enabled: false},
+                        title:{
+                            text: null
+                        }
+                    },
+                    credits:{
+                        enabled: false // 禁用版权信息
+                    }
+                });
+            },error:function(){
+
+            }
+        });
+    }
+</script>
+
+</html>

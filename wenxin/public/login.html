@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+	<link rel="stylesheet" href="css/common.css" type="text/css" />
+	<title>账户登录</title>
+	<style>
+		.login-top{
+			background: url(images/login_bg.png) repeat ;
+			background-size: 100% 2rem;
+			width:100%;
+			height: 2rem;
+		}
+		.login-top h1{
+			text-align: center;
+			color: #FFFFFF;
+			line-height: 0.7rem;
+			margin-top:0.5rem;
+			font-size: 0.25rem;
+			letter-spacing: 0.07rem;
+		}
+		.login-top p{
+			text-align: center;
+			color: #FFFFFF;
+			font-size: 0.13rem;
+		}
+		.login-form{
+			width: 90%;
+			margin: -0.3rem auto 0 auto;
+			height: 3.3rem;
+			background: #FFFFFF;
+			padding: 0.3rem;
+		}
+		.login-form p{
+			border-left: 0.05rem solid #DA251C;
+    		padding-left: 0.15rem;
+    		font-size: 0.19rem;
+    		margin-bottom: 0.2rem;
+		}
+		.input-wrap{
+			padding: 0.1rem 0 0 0;
+			border-bottom: 0.01rem solid #E0E0E0;
+			margin-left: 0.3rem;
+			position: relative;
+		}
+		.input-wrap img{
+			margin-left: -0.3rem;
+			width: 0.16rem;
+			height:0.18rem;
+			vertical-align: middle;
+		}
+		.input-wrap input{
+			width: 100%;
+			height: 0.35rem;
+			font-size: 0.16rem;
+			padding: 0 0.2rem;
+		}
+		.input-wrap .code{
+			position: absolute;
+		    height: 0.35rem;
+		    width: 1rem;
+		    right: 0;
+		    bottom: 0;
+		}
+		.login-form button{
+			width: 100%;
+    		height: 0.45rem;
+    		margin-top: 0.3rem;
+    		letter-spacing: 0.1rem;
+    		color: #FFFFFF;
+    		border-radius: 3px;
+			font-size: 0.2rem;
+		}
+		.login-form button.redshow{
+			background:#DA251C
+		}
+		.login-footer{
+			position: fixed;
+		    bottom: 0rem;
+		    width: 100%;
+		}
+		.hr-wrap{
+			position: relative;
+		}
+		.login-footer hr{
+			color:#DCDFE0;
+			margin: 0.3rem 0;
+		}
+		.login-footer p{
+			width: 60%;
+		    position: absolute;
+		    top: -0.08rem;
+		    text-align: center;
+		    left: 20%;
+		    background: #FAF6F6;
+    		color: #CCC4C4;
+		}
+	</style>
+</head>
+<body>
+	<div class="login-top">
+        <h1>我的工作台</h1> 
+        <p>输入帐号密码，关联OMS帐号</p>       
+    </div>
+    <div class="login-form">
+    	<p>关联帐号</p>
+    	<div class="input-wrap"><img src="images/zhanghao.png" alt=""><input type="text" placeholder="请输入帐号" id="userName"></div>
+    	<div class="input-wrap"><img src="images/mima.png" alt=""><input type="password" placeholder="请输入密码" id="userPassword"></div>
+    	<div class="input-wrap">
+    		<img src="images/yanzheng.png" alt="">
+    		<input type="text" placeholder="验证码" maxlength="4" id="verifyCode">
+    		<img src="" class="code">
+    	</div>
+    	<button id="loginsumbit" onclick="login()" disabled>登录</button>
+    </div>
+	<div class="login-footer">
+		<div class="hr-wrap">
+			<hr>
+			<p>首次登录，需要输入关联帐号</p>
+		</div>
+	</div>
+</body>
+<script src="js/jquery1.11.min.js"></script>
+<script src="js/layer.js"></script>
+<script src="../js/config.js"></script>
+<script>
+    $(function(){
+        //验证码获取
+        var append = "?clearCache=" + new Date().getTime() + "a" + Math.random();
+        $(".code").prop("src",ApiUrl+"/wechat/WechatLoginCtrl-getVerifyImage" + append);
+	    $(".code").on('click',function(){
+	    	var append = "?clearCache=" + new Date().getTime() + "a" + Math.random(); 
+	    	$(".code").prop("src",ApiUrl+"/wechat/WechatLoginCtrl-getVerifyImage" + append);
+	    })
+		//获取屏幕高度
+        var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        $(window).on('resize', function () {
+            var nowClientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            if (clientHeight > nowClientHeight) {
+                $(".login-footer").css('position','relative')
+            }
+            else {
+                $(".login-footer").css('position','fixed')
+            }
+        });
+        var buttonshow =true
+        $(document).on('input propertychange',function (e) {
+			if (e.type === "input" || e.orignalEvent.propertyName === "value") {
+                if(this.activeElement.value.length>0){
+                    $("input").each(function () {
+						if($(this).val().length==0){
+                            buttonshow=false
+							return false
+						}
+                        buttonshow=true
+                    })
+				}else{
+                    buttonshow=false
+				}
+				if(buttonshow){
+                    $("#loginsumbit").addClass("redshow")
+                    $("#loginsumbit").prop("disabled",false)
+				}else{
+                    $("#loginsumbit").removeClass("redshow")
+                    $("#loginsumbit").prop("disabled",true)
+				}
+			}
+		})
+    })
+    //登录
+	function login() {
+		var userName = $("#userName").val();
+        var userPassword = $("#userPassword").val();
+        var verifyCode = $("#verifyCode").val();
+        $.ajax({
+            type:"POST",
+            url:ApiUrl+"/wechat/WechatLoginCtrl-login",
+            xhrFields:{
+                withCredentials:true,
+            },
+            crossDomain:true,
+            data:{
+                'userName':$("#userName").val(),
+                'userPassword':$("#userPassword").val(),
+                'verifyCode':$("#verifyCode").val()
+            },
+            success:function(res){
+				if(res.state!=undefined){
+                    layer.open({
+                        content: res.msg
+                        ,skin: 'msg'
+                        ,time: 2 //2秒后自动关闭
+                    });
+                    var append = "?clearCache=" + new Date().getTime() + "a" + Math.random();
+                    $(".code").prop("src",ApiUrl+"/wechat/WechatLoginCtrl-getVerifyImage" + append);
+				}else{
+                    location.href='index.html'
+				}
+            },error:function(a,b,c){
+                layer.open({
+                    content: c
+                    ,skin: 'msg'
+                    ,time: 2 //2秒后自动关闭
+                });
+            }
+        });
+    }
+</script>
+</html>
+
+

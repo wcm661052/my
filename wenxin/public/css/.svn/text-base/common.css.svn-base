@@ -1,0 +1,31 @@
+/*
+
+ *  Project  for WeiDingDing
+ *  Build by 2016 August
+ *  Name Lzq
+ *  Email 475385036@qq.com
+ *
+ *  */
+
+
+ * {box-sizing:border-box;}
+ html {font-size: 625%;}
+ body {font-family: "微软雅黑";font-size:11px;}
+ html,body {height:100%;color:#8A9099;background: #FAF6F6;display:flex;flex-direction:column;}
+ ul,ol{margin:0;padding:0;list-style: none;}
+ body, dl, dd, h1, h2, h3, h4, h5, h6, p, form{margin:0;}
+ input, button, select, textarea {color:#8A9099; font-size: 100%;-webkit-appearance : none ;}
+button:disabled{background-color: #dddddd!important;color: #fff;}
+ a {text-decoration: none;color:#8A9099;}
+ a:hover, a:focus{text-decoration: none;}
+ i{font-style:normal;display: inline-block;background-repeat: no-repeat;background-position: center;background-size: contain;}
+ button,input,select {border:0;margin:0;padding: 0;}
+ input:focus,select:focus {outline-style: none;}
+
+.redcolor{color:#F5473B;}
+.right-border{border-right: 0.01rem solid #EBEBF2;}
+.content-wrap{flex: 1;overflow: auto;}
+
+@media screen and (min-width:320px) and (max-width:330px) and (orientation:portrait) {
+    html { font-size: 556.3%; }
+}

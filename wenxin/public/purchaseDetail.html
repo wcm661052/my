@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <link rel="stylesheet" href="css/common.css" type="text/css" />
+    <title>采购详情</title>
+    <style>
+        .purchase{
+            height: 0.8rem;
+            padding: 0.15rem;
+            background: #FFFFFF;
+        }
+        .purchase-name{
+            color:#1B2E4B;
+            font-size: 0.18rem;
+        }
+        .purchase-sum{
+            margin-top: 0.05rem;
+        }
+        .title{
+            padding: 0.10rem 0.15rem;
+        }
+        .title img{
+            width: 0.2rem;
+            height: 0.2rem;
+            vertical-align: text-bottom;
+            margin-right: 0.1rem;
+        }
+        .purchase-list{
+            padding: 0.10rem 0.15rem;
+            background: #FFFFFF;
+        }
+        .purchase-list li{
+            padding: 0.10rem 0;
+            border-bottom: 0.01rem solid #EBEEF2;
+            background: #FFFFFF;
+        }
+        .purchase-list li p{
+            line-height: 0.25rem;
+        }
+        #sum{
+            float: right;
+            font-size: 0.14rem;
+        }
+        .spMc{
+            font-size: 0.14rem;
+            color:#F5473B;
+        }
+        .ptXsj{
+            float: right;
+            margin-right: 0.1rem;
+        }
+        .spZxsj{
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="purchase">
+        <p class="purchase-name">采购单位：<span id="uintMc"></span></p>
+        <p class="purchase-sum"><span id="orderDate">日期：</span><span id="sum" class="redcolor">合计：</span></p>
+    </div>
+    <p class="title"><img src="images/caigouqingdan.png" alt="">采购清单</p>
+    <div class="content-wrap">
+        <ul class="purchase-list">
+        </ul>
+    </div>
+</body>
+<script src="js/jquery1.11.min.js"></script>
+<script src="../js/config.js"></script>
+<script>
+    $(function(){
+        $("#orderDate").html('日期：'+localStorage.orderDate)
+        $("#uintMc").html(localStorage.uintMc)
+        var pram={
+            cgrId:localStorage.cgrId,
+            orderDate:localStorage.orderDate
+        }
+        $.ajax({
+            type:"GET",
+            url:ApiUrl+"/wechat/WechatSalesStatisticsCtrl-cgrOrderDetail",
+            xhrFields:{
+                withCredentials:true,
+            },
+            data:pram,
+            crossDomain:true,
+            success:function(res){
+                var data=res.data.cgrGoodslist
+                var lilist=''
+                var sum=0
+                for(var i=0;i<data.length;i++){
+                    lilist+='<li><p>' +
+                        '<span class="spMc">'+data[i].spMc+'*'+data[i].spNum+data[i].spUnit+'</span>' +
+                        '<span class="spZxsj">总价：￥'+data[i].spZxsj+'</span>' +
+                        '<span class="ptXsj">单价：￥'+data[i].ptXsj+'</span>' +
+                        '</p></li>'
+                    sum+=parseFloat(data[i].spZxsj);
+                }
+                $(".purchase-list").html(lilist);
+                $("#sum").html('合计：'+sum.toFixed(2))
+            },error:function(){
+
+            }
+        });
+    })
+</script>
+
+</html>
